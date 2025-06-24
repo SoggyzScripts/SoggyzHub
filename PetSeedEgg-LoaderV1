@@ -1,0 +1,152 @@
+-- Load Spawner Script
+local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/tempScript-gay/a/refs/heads/main/b"))()
+
+local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create Loading Screen
+local loadingGui = Instance.new("ScreenGui", playerGui)
+loadingGui.Name = "SoggyzLoading"
+
+local loadingFrame = Instance.new("Frame", loadingGui)
+loadingFrame.Size = UDim2.new(1, 0, 1, 0)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+
+local loadingLabel = Instance.new("TextLabel", loadingFrame)
+loadingLabel.Size = UDim2.new(0, 400, 0, 100)
+loadingLabel.Position = UDim2.new(0.5, -200, 0.5, -50)
+loadingLabel.Text = "Soggyz Scripts"
+loadingLabel.Font = Enum.Font.GothamBlack
+loadingLabel.TextSize = 48
+loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+loadingLabel.BackgroundTransparency = 1
+
+-- Fade and load main GUI
+task.delay(2, function()
+	for i = 1, 10 do
+		loadingFrame.BackgroundTransparency = i / 10
+		loadingLabel.TextTransparency = i / 10
+		wait(0.05)
+	end
+	loadingGui:Destroy()
+
+	-- === Begin Main GUI ===
+	local ScreenGui = Instance.new("ScreenGui", playerGui)
+	ScreenGui.Name = "SpawnerGUI"
+
+	-- Title
+	local title = Instance.new("TextLabel")
+	title.Parent = ScreenGui
+	title.Size = UDim2.new(0, 300, 0, 50)
+	title.Position = UDim2.new(0, 20, 0, 20)
+	title.BackgroundTransparency = 1
+	title.Text = "Soggyz Scripts"
+	title.Font = Enum.Font.GothamBold
+	title.TextSize = 28
+	title.TextColor3 = Color3.fromRGB(255, 255, 0)
+
+	-- Pet Name Input
+	local petNameInput = Instance.new("TextBox")
+	petNameInput.Parent = ScreenGui
+	petNameInput.Size = UDim2.new(0, 200, 0, 35)
+	petNameInput.Position = UDim2.new(0, 20, 0, 80)
+	petNameInput.PlaceholderText = "Pet Name (e.g. Raccoon)"
+	petNameInput.Font = Enum.Font.SourceSans
+	petNameInput.TextSize = 18
+	petNameInput.Text = ""
+	petNameInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+	petNameInput.TextColor3 = Color3.new(0, 0, 0)
+
+	-- KG Input
+	local kgInput = Instance.new("TextBox")
+	kgInput.Parent = ScreenGui
+	kgInput.Size = UDim2.new(0, 95, 0, 35)
+	kgInput.Position = UDim2.new(0, 20, 0, 125)
+	kgInput.PlaceholderText = "KG"
+	kgInput.Font = Enum.Font.SourceSans
+	kgInput.TextSize = 18
+	kgInput.Text = ""
+	kgInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+	kgInput.TextColor3 = Color3.new(0, 0, 0)
+
+	-- Age Input
+	local ageInput = Instance.new("TextBox")
+	ageInput.Parent = ScreenGui
+	ageInput.Size = UDim2.new(0, 95, 0, 35)
+	ageInput.Position = UDim2.new(0, 125, 0, 125)
+	ageInput.PlaceholderText = "Age"
+	ageInput.Font = Enum.Font.SourceSans
+	ageInput.TextSize = 18
+	ageInput.Text = ""
+	ageInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+	ageInput.TextColor3 = Color3.new(0, 0, 0)
+
+	-- Utility: Create Buttons
+	local function createButton(text, position, callback)
+		local button = Instance.new("TextButton")
+		button.Size = UDim2.new(0, 200, 0, 40)
+		button.Position = position
+		button.Text = text
+		button.Parent = ScreenGui
+		button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+		button.TextColor3 = Color3.fromRGB(255, 255, 255)
+		button.Font = Enum.Font.SourceSansBold
+		button.TextSize = 20
+		button.MouseButton1Click:Connect(callback)
+	end
+
+	-- Store last pet info
+	local lastPet = {
+		name = nil,
+		kg = nil,
+		age = nil
+	}
+
+	-- Spawn Pet Button
+	createButton("Spawn Pet", UDim2.new(0, 20, 0, 175), function()
+		local pet = petNameInput.Text
+		local kg = tonumber(kgInput.Text) or 1
+		local age = tonumber(ageInput.Text) or 1
+		local supported = Spawner.GetPets()
+		local exists = false
+
+		for _, name in pairs(supported) do
+			if string.lower(name) == string.lower(pet) then
+				exists = true
+				break
+			end
+		end
+
+		if exists then
+			Spawner.SpawnPet(pet, kg, age)
+			lastPet.name = pet
+			lastPet.kg = kg
+			lastPet.age = age
+		else
+			warn("Pet not found! Check spelling or use Spawner.GetPets()")
+		end
+	end)
+
+	-- Dupe Button (uses SpawnPet to match inventory system)
+	createButton("Dupe", UDim2.new(0, 20, 0, 225), function()
+		if lastPet.name then
+			Spawner.SpawnPet(lastPet.name, lastPet.kg, lastPet.age)
+		else
+			warn("No pet has been spawned yet to duplicate.")
+		end
+	end)
+
+	-- Spawn Seed
+	createButton("Spawn Candy Blossom", UDim2.new(0, 20, 0, 275), function()
+		Spawner.SpawnSeed("Candy Blossom")
+	end)
+
+	-- Spawn Egg
+	createButton("Spawn Night Egg", UDim2.new(0, 20, 0, 325), function()
+		Spawner.SpawnEgg("Night Egg")
+	end)
+
+	-- Spin Plant
+	createButton("Spin Sunflower", UDim2.new(0, 20, 0, 375), function()
+		Spawner.Spin("Sunflower")
+	end)
+end)
