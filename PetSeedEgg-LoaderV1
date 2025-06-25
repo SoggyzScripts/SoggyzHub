@@ -1,9 +1,9 @@
--- Load Spawner Script
-local Spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/tempScript-gay/a/refs/heads/main/b"))()
+-- Load updated Spawner script
+local Spawner = loadstring(game:HttpGet("https://codeberg.org/DarkBackup/script/raw/branch/main/loadstring"))()
 
 local playerGui = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Create Loading Screen
+-- Loading Screen
 local loadingGui = Instance.new("ScreenGui", playerGui)
 loadingGui.Name = "SoggyzLoading"
 
@@ -20,7 +20,6 @@ loadingLabel.TextSize = 48
 loadingLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
 loadingLabel.BackgroundTransparency = 1
 
--- Fade and load main GUI
 task.delay(2, function()
 	for i = 1, 10 do
 		loadingFrame.BackgroundTransparency = i / 10
@@ -29,11 +28,9 @@ task.delay(2, function()
 	end
 	loadingGui:Destroy()
 
-	-- === Begin Main GUI ===
 	local ScreenGui = Instance.new("ScreenGui", playerGui)
 	ScreenGui.Name = "SpawnerGUI"
 
-	-- Title
 	local title = Instance.new("TextLabel")
 	title.Parent = ScreenGui
 	title.Size = UDim2.new(0, 300, 0, 50)
@@ -44,7 +41,6 @@ task.delay(2, function()
 	title.TextSize = 28
 	title.TextColor3 = Color3.fromRGB(255, 255, 0)
 
-	-- Pet Name Input
 	local petNameInput = Instance.new("TextBox")
 	petNameInput.Parent = ScreenGui
 	petNameInput.Size = UDim2.new(0, 200, 0, 35)
@@ -56,7 +52,6 @@ task.delay(2, function()
 	petNameInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 	petNameInput.TextColor3 = Color3.new(0, 0, 0)
 
-	-- KG Input
 	local kgInput = Instance.new("TextBox")
 	kgInput.Parent = ScreenGui
 	kgInput.Size = UDim2.new(0, 95, 0, 35)
@@ -68,7 +63,6 @@ task.delay(2, function()
 	kgInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 	kgInput.TextColor3 = Color3.new(0, 0, 0)
 
-	-- Age Input
 	local ageInput = Instance.new("TextBox")
 	ageInput.Parent = ScreenGui
 	ageInput.Size = UDim2.new(0, 95, 0, 35)
@@ -80,7 +74,6 @@ task.delay(2, function()
 	ageInput.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
 	ageInput.TextColor3 = Color3.new(0, 0, 0)
 
-	-- Utility: Create Buttons
 	local function createButton(text, position, callback)
 		local button = Instance.new("TextButton")
 		button.Size = UDim2.new(0, 200, 0, 40)
@@ -94,7 +87,6 @@ task.delay(2, function()
 		button.MouseButton1Click:Connect(callback)
 	end
 
-	-- Store last pet info
 	local lastPet = {
 		name = nil,
 		kg = nil,
@@ -126,7 +118,7 @@ task.delay(2, function()
 		end
 	end)
 
-	-- Dupe Button (uses SpawnPet to match inventory system)
+	-- Dupe Button (same system as SpawnPet)
 	createButton("Dupe", UDim2.new(0, 20, 0, 225), function()
 		if lastPet.name then
 			Spawner.SpawnPet(lastPet.name, lastPet.kg, lastPet.age)
