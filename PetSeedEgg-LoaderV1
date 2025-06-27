@@ -120,6 +120,6 @@ task.delay(2, function()
 		Spawner.Spin("Sunflower")
 	end)
 
-	-- Load the default Spawner UI
-	Spawner.Load()
+	-- ⚠️ Don't call Spawner.Load() here to avoid showing the default UI
+	-- Spawner.Load() -- ← Removed on purpose
 end)
