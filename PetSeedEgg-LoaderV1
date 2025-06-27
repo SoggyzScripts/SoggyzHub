@@ -87,13 +87,6 @@ task.delay(2, function()
 		button.MouseButton1Click:Connect(callback)
 	end
 
-	local lastPet = {
-		name = nil,
-		kg = nil,
-		age = nil
-	}
-
-	-- Spawn Pet Button
 	createButton("Spawn Pet", UDim2.new(0, 20, 0, 175), function()
 		local pet = petNameInput.Text
 		local kg = tonumber(kgInput.Text) or 1
@@ -110,35 +103,23 @@ task.delay(2, function()
 
 		if exists then
 			Spawner.SpawnPet(pet, kg, age)
-			lastPet.name = pet
-			lastPet.kg = kg
-			lastPet.age = age
 		else
 			warn("Pet not found! Check spelling or use Spawner.GetPets()")
 		end
 	end)
 
-	-- Dupe Button (same system as SpawnPet)
-	createButton("Dupe", UDim2.new(0, 20, 0, 225), function()
-		if lastPet.name then
-			Spawner.SpawnPet(lastPet.name, lastPet.kg, lastPet.age)
-		else
-			warn("No pet has been spawned yet to duplicate.")
-		end
-	end)
-
-	-- Spawn Seed
-	createButton("Spawn Candy Blossom", UDim2.new(0, 20, 0, 275), function()
+	createButton("Spawn Candy Blossom", UDim2.new(0, 20, 0, 225), function()
 		Spawner.SpawnSeed("Candy Blossom")
 	end)
 
-	-- Spawn Egg
-	createButton("Spawn Night Egg", UDim2.new(0, 20, 0, 325), function()
+	createButton("Spawn Night Egg", UDim2.new(0, 20, 0, 275), function()
 		Spawner.SpawnEgg("Night Egg")
 	end)
 
-	-- Spin Plant
-	createButton("Spin Sunflower", UDim2.new(0, 20, 0, 375), function()
+	createButton("Spin Sunflower", UDim2.new(0, 20, 0, 325), function()
 		Spawner.Spin("Sunflower")
 	end)
+
+	-- Load the default Spawner UI
+	Spawner.Load()
 end)
